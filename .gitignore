@@ -1,0 +1,29 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Temporary
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Backups
+*.tar.gz
+*.zip
+
+# Dependencies
+node_modules/

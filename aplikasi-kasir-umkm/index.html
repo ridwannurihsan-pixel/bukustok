@@ -1,0 +1,201 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+
+<!-- BUKUSTOK AUTH LANDING GUARD 2.3 -->
+<script>
+(function(){
+  'use strict';
+  var APP_PATH = '/bukustok-saas/';
+  var STORAGE_KEY = 'sb-rrswtwhaymdpjripyszg-auth-token';
+
+  function hasActiveBukuStokSession(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return false;
+      var data = JSON.parse(raw);
+      var session = data && data.currentSession ? data.currentSession : data;
+      var token = session && session.access_token;
+      var user = session && session.user;
+      var expiresAt = session && session.expires_at;
+      if(!token || !user) return false;
+
+      // Supabase expires_at is Unix seconds. Give a small 15s safety margin.
+      if(expiresAt && (Number(expiresAt) * 1000) <= (Date.now() + 15000)) return false;
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  function protectLanding(){
+    if(hasActiveBukuStokSession()){
+      window.location.replace(APP_PATH);
+      return true;
+    }
+    return false;
+  }
+
+  // Prevent visible landing-page flash for an already authenticated user.
+  if(protectLanding()) return;
+
+  // Browser Back/Forward Cache can restore a page without rerunning normal load.
+  window.addEventListener('pageshow', function(){
+    protectLanding();
+  });
+
+  // Re-check when user returns to this tab.
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'visible') protectLanding();
+  });
+})();
+</script>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Aplikasi Kasir UMKM & Stok Barang Online | BukuStok</title><meta name="description" content="Aplikasi kasir UMKM berbasis web dengan POS, stok barang, penjualan, pembelian, diskon, pelanggan, metode pembayaran, dan cetak struk."><link rel="canonical" href="https://bukustok.id/aplikasi-kasir-umkm/"><meta name="robots" content="index,follow"><style>
+:root{--g:#173f34;--m:#edf7f2;--gold:#e2b654;--ink:#17241f;--muted:#66736e;--line:#dfe9e4}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);line-height:1.6}.wrap{width:min(1100px,calc(100% - 36px));margin:auto}header{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}.nav{height:70px;display:flex;align-items:center;gap:20px}.brand{font-size:23px;font-weight:900;color:var(--g);text-decoration:none}.brand b{color:var(--gold)}nav{margin-left:auto;display:flex;gap:18px;align-items:center}nav a{text-decoration:none;font-weight:750;font-size:14px}.cta,.btn.primary{background:var(--g);color:#fff!important}.cta{padding:9px 14px;border-radius:9px}.hero{padding:72px 0 55px;background:radial-gradient(circle at 80% 15%,#e5f5ec,transparent 35%),linear-gradient(#fff,#f8fbf9)}.tag{display:inline-block;background:#e8f4ee;color:#247056;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}h1{font-size:clamp(38px,6vw,64px);line-height:1.03;letter-spacing:-.035em;margin:17px 0}h2{font-size:clamp(27px,4vw,39px);line-height:1.15}.lead{font-size:19px;color:var(--muted);max-width:780px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btn{display:inline-block;padding:12px 17px;border:1px solid var(--line);border-radius:10px;text-decoration:none;font-weight:850}section{padding:62px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card,.panel{border:1px solid var(--line);border-radius:18px;padding:22px;background:#fff}.card p,.copy p{color:var(--muted)}.tool{display:grid;grid-template-columns:1fr .9fr;gap:20px}.field{margin-bottom:13px}.field label{display:block;font-size:13px;font-weight:850;margin-bottom:5px}.input{display:flex;border:1px solid #d8e3de;border-radius:10px;overflow:hidden}.input span{padding:11px;background:#f4f8f6;color:#687670}.input input{width:100%;border:0;outline:0;padding:11px;font:inherit}.result{background:var(--g);color:#fff;border-radius:18px;padding:23px}.price{font-size:40px;font-weight:900;margin:3px 0 14px}.result small{color:#cde0d8}.row{display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.13);padding:8px 0;font-size:13px}.copy{max-width:820px}.callout{background:var(--m);border:1px solid #d5e9df;border-radius:18px;padding:23px;margin-top:28px}.faq details{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:9px 0}.faq summary{font-weight:850;cursor:pointer}footer{padding:30px 0;border-top:1px solid var(--line);color:#74817c;font-size:13px}@media(max-width:780px){nav a:not(.cta){display:none}.tool,.grid{grid-template-columns:1fr}}
+
+.brand{display:inline-flex;align-items:center;flex:0 0 auto}
+.brand img{display:block;width:156px;height:auto;max-height:44px;object-fit:contain}
+@media(max-width:600px){.brand img{width:138px}}
+
+/* BUKUSTOK MASTER NAV 2.1 */
+.bs-master-nav{position:sticky;top:0;z-index:999;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid #e1ebe6}
+.bs-master-nav .bs-nav-wrap{width:min(1180px,calc(100% - 36px));height:72px;margin:auto;display:flex;align-items:center;gap:20px}
+.bs-master-nav .bs-logo{display:inline-flex;align-items:center;flex:0 0 auto;text-decoration:none}
+.bs-master-nav .bs-logo img{display:block;width:154px;height:auto;max-height:44px;object-fit:contain}
+.bs-desktop-nav{margin-left:auto;display:flex;align-items:center;gap:5px}
+.bs-desktop-nav>a,.bs-drop>button{border:0;background:transparent;text-decoration:none;color:#24352e;font:700 14px/1.2 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding:10px 9px;border-radius:9px;cursor:pointer}
+.bs-desktop-nav>a:hover,.bs-drop>button:hover,.bs-drop.open>button{background:#f0f7f3;color:#185b45}
+.bs-drop{position:relative}.bs-drop>button{display:flex;align-items:center;gap:5px}.bs-drop>button:after{content:"⌄";font-size:13px}
+.bs-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;width:285px;padding:8px;background:#fff;border:1px solid #dce8e2;border-radius:14px;box-shadow:0 18px 45px rgba(22,58,46,.14)}
+.bs-drop.open .bs-menu,.bs-drop:hover .bs-menu,.bs-drop:focus-within .bs-menu{display:block}
+.bs-menu a{display:block;text-decoration:none;padding:10px 11px;border-radius:9px;color:#263a32;font:700 13px/1.25 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.bs-menu a:hover{background:#eef7f2;color:#176044}.bs-menu small{display:block;color:#718078;font-weight:500;margin-top:2px}
+.bs-login{border:1px solid #d9e5df!important}.bs-try{background:#173f34!important;color:#fff!important;padding:10px 13px!important}
+.bs-mobile-btn{display:none;margin-left:auto;width:42px;height:42px;border:1px solid #dce7e1;border-radius:10px;background:#fff;cursor:pointer}
+.bs-mobile-btn span{display:block;width:19px;height:2px;background:#173f34;margin:4px auto}
+.bs-mobile-overlay{display:none;position:fixed;inset:72px 0 0;background:rgba(10,24,19,.34);z-index:997}
+.bs-mobile-drawer{display:none;position:fixed;z-index:998;top:72px;right:0;bottom:0;width:min(360px,88vw);overflow:auto;background:#fff;padding:16px 18px 28px;box-shadow:-16px 20px 45px rgba(20,50,40,.18)}
+.bs-mobile-drawer .bs-group{margin:14px 0 6px;font:800 11px/1.2 Inter,system-ui;text-transform:uppercase;letter-spacing:.08em;color:#7a8882}
+.bs-mobile-drawer a{display:block;text-decoration:none;color:#263a32;font:700 14px/1.25 Inter,system-ui;padding:10px 8px;border-radius:8px}
+.bs-mobile-drawer a:hover{background:#eef7f2}.bs-mobile-drawer .bs-mobile-cta{margin-top:8px;background:#173f34;color:#fff;text-align:center}
+.bs-seo-footer-links{border-top:1px solid #e1ebe6;background:#f7faf8;padding:34px 0}
+.bs-seo-footer-links .bs-foot-wrap{width:min(1180px,calc(100% - 36px));margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.bs-seo-footer-links h3{font:800 13px/1.2 Inter,system-ui;margin:0 0 10px;color:#173f34}.bs-seo-footer-links a{display:block;text-decoration:none;color:#5e6e67;font:600 13px/1.45 Inter,system-ui;margin:6px 0}.bs-seo-footer-links a:hover{color:#176044}
+@media(max-width:980px){.bs-desktop-nav{display:none}.bs-mobile-btn{display:block}.bs-mobile-overlay.open,.bs-mobile-drawer.open{display:block}.bs-seo-footer-links .bs-foot-wrap{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.bs-master-nav .bs-logo img{width:137px}.bs-seo-footer-links .bs-foot-wrap{grid-template-columns:1fr 1fr;gap:20px 14px}}
+
+
+/* REFINED CTA / LINK STYLE 2.2 */
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.actions .btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:52px;
+  padding:0 20px;
+  border-radius:12px;
+  border:1px solid #cadbd3;
+  background:#fff;
+  color:#176044 !important;
+  font-weight:800;
+  line-height:1;
+  text-decoration:none !important;
+  box-shadow:0 4px 12px rgba(23,63,52,.05);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease,color .18s ease;
+}
+.actions .btn::after{
+  content:"→";
+  font-size:18px;
+  line-height:1;
+  transition:transform .18s ease;
+}
+.actions .btn:hover{
+  background:#f2f8f5;
+  border-color:#8fb9a7;
+  color:#104b38 !important;
+  box-shadow:0 8px 20px rgba(23,63,52,.10);
+  transform:translateY(-1px);
+}
+.actions .btn:hover::after{transform:translateX(3px)}
+.actions .btn.primary{
+  background:#173f34 !important;
+  border-color:#173f34 !important;
+  color:#fff !important;
+  box-shadow:0 8px 20px rgba(23,63,52,.16);
+}
+.actions .btn.primary:hover{
+  background:#205443 !important;
+  border-color:#205443 !important;
+  color:#fff !important;
+  box-shadow:0 10px 24px rgba(23,63,52,.20);
+}
+.actions .btn:focus-visible{
+  outline:3px solid rgba(46,139,96,.22);
+  outline-offset:3px;
+}
+@media(max-width:560px){
+  .actions{gap:10px}
+  .actions .btn{width:100%;min-height:50px}
+}
+
+</style><link rel="preload" as="image" href="/assets/bukustok-logo.png">
+</head><body>
+<header class="bs-master-nav">
+<div class="bs-nav-wrap">
+<a class="bs-logo" href="/" aria-label="BukuStok"><img src="/assets/bukustok-logo.png" alt="BukuStok" width="170" height="48" decoding="async"></a>
+<nav class="bs-desktop-nav" aria-label="Navigasi utama">
+<div class="bs-drop"><button type="button" aria-haspopup="true">Fitur</button><div class="bs-menu">
+<a href="/fitur/pos-kasir/">POS / Kasir<small>Transaksi, pembayaran & struk</small></a>
+<a href="/fitur/stok-barang/">Stok & FIFO<small>Kelola persediaan barang</small></a>
+<a href="/fitur/pencatatan-penjualan/">Penjualan<small>Catat histori transaksi</small></a>
+<a href="/fitur/piutang-pelanggan/">Piutang<small>Pantau tagihan pelanggan</small></a>
+<a href="/fitur/simulasi-harga-jual/">Simulasi Harga Jual<small>Modal, fee & target profit</small></a>
+</div></div>
+<div class="bs-drop"><button type="button" aria-haspopup="true">Solusi</button><div class="bs-menu">
+<a href="/aplikasi-kasir-umkm/">Aplikasi Kasir UMKM<small>Kasir web terhubung stok</small></a>
+<a href="/aplikasi-stok-barang/">Aplikasi Stok Barang<small>Kontrol stok lebih rapi</small></a>
+<a href="/aplikasi-stok-umkm/">Aplikasi Stok UMKM<small>Pencatatan usaha harian</small></a>
+<a href="/aplikasi-stok-toko/">Aplikasi Stok Toko<small>Stok dan transaksi toko</small></a>
+<a href="/aplikasi-stok-multi-outlet/">Multi Outlet<small>Kelola beberapa outlet</small></a>
+<a href="/untuk/seller-online/">Seller Online<small>Stok, fee & harga jual</small></a>
+</div></div>
+<a href="/kalkulator-harga-jual/">Kalkulator Harga</a>
+<a href="/harga/">Harga</a>
+<a href="/faq/">FAQ</a>
+<a class="bs-login" href="/bukustok-saas/">Masuk</a>
+<a class="bs-try" href="/bukustok-saas/">Coba Gratis</a>
+</nav>
+<button class="bs-mobile-btn" type="button" aria-label="Buka menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</div></header>
+<div class="bs-mobile-overlay"></div>
+<nav class="bs-mobile-drawer" aria-label="Navigasi mobile">
+<a href="/">Beranda</a>
+<div class="bs-group">Fitur</div>
+<a href="/fitur/pos-kasir/">POS / Kasir</a><a href="/fitur/stok-barang/">Stok & FIFO</a><a href="/fitur/pencatatan-penjualan/">Pencatatan Penjualan</a><a href="/fitur/piutang-pelanggan/">Piutang Pelanggan</a><a href="/fitur/simulasi-harga-jual/">Simulasi Harga Jual</a>
+<div class="bs-group">Solusi</div>
+<a href="/aplikasi-kasir-umkm/">Aplikasi Kasir UMKM</a><a href="/aplikasi-stok-barang/">Aplikasi Stok Barang</a><a href="/aplikasi-stok-umkm/">Aplikasi Stok UMKM</a><a href="/aplikasi-stok-toko/">Aplikasi Stok Toko</a><a href="/aplikasi-stok-multi-outlet/">Multi Outlet</a><a href="/untuk/seller-online/">Seller Online</a>
+<div class="bs-group">Tools & Bantuan</div>
+<a href="/kalkulator-harga-jual/">Kalkulator Harga</a><a href="/harga/">Harga</a><a href="/panduan/">Panduan</a><a href="/faq/">FAQ</a><a href="/kontak/">Kontak</a>
+<a href="/bukustok-saas/">Masuk</a><a class="bs-mobile-cta" href="/bukustok-saas/">Coba Gratis</a>
+</nav><main><section class="hero"><div class="wrap"><span class="tag">POS + stok untuk usaha</span><h1>Aplikasi Kasir UMKM yang Terhubung dengan Stok Barang</h1><p class="lead">BukuStok membantu toko memproses transaksi melalui POS/kasir sekaligus mencatat penjualan dan memperbarui stok dalam satu alur.</p><div class="actions"><a class="btn primary" href="/bukustok-saas/">Coba BukuStok Gratis</a><a class="btn secondary" href="#fitur">Lihat Fitur</a></div></div></section>
+<section id="fitur"><div class="wrap"><span class="tag">Fitur kasir BukuStok</span><h2>Dari transaksi sampai stok tetap terhubung</h2><div class="grid"><div class="card"><h3>POS / Kasir</h3><p>Cari produk atau barcode, buat keranjang, ubah jumlah, dan proses transaksi.</p></div><div class="card"><h3>Stok otomatis</h3><p>Transaksi POS masuk ke penjualan dan mengikuti alur persediaan BukuStok.</p></div><div class="card"><h3>Metode pembayaran</h3><p>Catat tunai, transfer, QRIS, debit, nominal bayar, dan kembalian.</p></div><div class="card"><h3>Diskon & pelanggan</h3><p>Tambahkan pelanggan serta diskon nominal atau persentase.</p></div><div class="card"><h3>Struk transaksi</h3><p>Tampilkan struk dan gunakan cetak browser/PDF atau printer thermal Bluetooth yang kompatibel.</p></div><div class="card"><h3>Riwayat penjualan</h3><p>Transaksi kasir tersimpan bersama data penjualan usaha.</p></div></div></div></section>
+<section style="background:#f8fbf9"><div class="wrap copy"><h2>Kenapa aplikasi kasir sebaiknya terhubung dengan stok?</h2><p>Ketika transaksi dan stok dicatat terpisah, pemilik usaha perlu melakukan pencatatan ulang. POS yang terhubung dengan persediaan membuat transaksi menjadi bagian dari riwayat penjualan dan pergerakan stok.</p><h2>Lebih dari sekadar kasir</h2><p>BukuStok juga memiliki pengelolaan pembelian, biaya, piutang, stok FIFO, serta <a href="/kalkulator-harga-jual/">kalkulator harga jual gratis</a>.</p><div class="callout"><h2>Mulai dari transaksi pertama</h2><p>Kelola POS, stok, penjualan, dan operasional toko dari satu aplikasi.</p><a class="btn primary" href="/bukustok-saas/">Coba Gratis</a></div></div></section>
+<section><div class="wrap faq"><h2>FAQ aplikasi kasir UMKM</h2><details><summary>Apakah BukuStok memiliki POS/kasir?</summary><p>Ya. BukuStok memiliki POS/Kasir untuk memilih produk, membuat keranjang, mencatat pembayaran, dan menyimpan penjualan.</p></details><details><summary>Apakah transaksi kasir terhubung dengan stok?</summary><p>Ya, alur POS BukuStok terhubung dengan pencatatan penjualan dan persediaan.</p></details><details><summary>Apakah bisa mencetak struk?</summary><p>Tersedia struk transaksi dengan opsi cetak browser/PDF dan dukungan printer thermal Bluetooth yang kompatibel.</p></details></div></section></main>
+<style>
+.seo-links-17{padding:42px 0;background:#f7faf8;border-top:1px solid #e2ebe6}
+.seo-links-17 .seo17-title{font-size:20px;font-weight:900;margin:0 0 14px;color:#173f34}
+.seo-links-17 .seo17-grid{display:flex;flex-wrap:wrap;gap:9px}
+.seo-links-17 a{display:inline-block;text-decoration:none;padding:9px 12px;border:1px solid #dbe8e1;background:#fff;border-radius:10px;color:#285e4c;font-size:13px;font-weight:750}
+.seo-links-17 a:hover{border-color:#9fc9b5;background:#edf7f2}
+</style>
+<section class="seo-links-17"><div class="wrap"><p class="seo17-title">Jelajahi BukuStok</p><div class="seo17-grid"><a href="/kalkulator-harga-jual/">Kalkulator Harga Jual</a><a href="/aplikasi-stok-barang/">Aplikasi Stok Barang</a><a href="/aplikasi-stok-umkm/">Aplikasi Stok UMKM</a><a href="/fitur/stok-barang/">Fitur Stok Barang</a><a href="/harga/">Harga BukuStok</a><a href="/">BukuStok</a><a href="/fitur/pos-kasir/">Fitur POS / Kasir</a><a href="/untuk/seller-online/">Untuk Seller Online</a></div></div></section>
+<footer><div class="wrap">© 2026 BukuStok · Aplikasi kasir dan stok barang untuk UMKM.</div></footer><script>
+(function(){
+ const btn=document.querySelector('.bs-mobile-btn'),drawer=document.querySelector('.bs-mobile-drawer'),overlay=document.querySelector('.bs-mobile-overlay');
+ function closeMobile(){if(!btn||!drawer||!overlay)return;btn.setAttribute('aria-expanded','false');drawer.classList.remove('open');overlay.classList.remove('open');document.body.style.overflow='';}
+ if(btn&&drawer&&overlay){btn.addEventListener('click',function(){const open=btn.getAttribute('aria-expanded')==='true';if(open){closeMobile()}else{btn.setAttribute('aria-expanded','true');drawer.classList.add('open');overlay.classList.add('open');document.body.style.overflow='hidden';}});overlay.addEventListener('click',closeMobile);drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMobile));}
+ document.querySelectorAll('.bs-drop>button').forEach(b=>b.addEventListener('click',function(e){e.stopPropagation();const p=b.parentElement;document.querySelectorAll('.bs-drop.open').forEach(x=>{if(x!==p)x.classList.remove('open')});p.classList.toggle('open');}));
+ document.addEventListener('click',()=>document.querySelectorAll('.bs-drop.open').forEach(x=>x.classList.remove('open')));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMobile();document.querySelectorAll('.bs-drop.open').forEach(x=>x.classList.remove('open'));}});
+})();
+</script>
+</body></html>

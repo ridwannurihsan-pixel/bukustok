@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /bukustok-saas
+
+Sitemap: https://bukustok.id/sitemap.xml

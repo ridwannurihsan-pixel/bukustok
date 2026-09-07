@@ -374,7 +374,13 @@ body.is-staff-view .btn-hapus-data{display:none !important}
   padding-left:10px;
 }
 .navbtn.active .ic{opacity:1;color:var(--sb-accent)}
-.navbtn .ic{width:17px;text-align:center;opacity:.75;flex-shrink:0;transition:opacity var(--transition),color var(--transition)}
+.navbtn .ic{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;text-align:center;opacity:.88;flex:0 0 20px;transition:opacity var(--transition),color var(--transition)}
+.navbtn .ic svg{display:block;width:20px;height:20px;overflow:visible;vector-effect:non-scaling-stroke}
+.navbtn:hover .ic svg,.navbtn.active .ic svg{stroke-width:2}
+@media(max-width:720px){
+  .navbtn .ic{width:21px;height:21px;flex-basis:21px}
+  .navbtn .ic svg{width:21px;height:21px}
+}
 .navbtn[hidden],.nav-section-label[hidden]{display:none!important}
 .sidebar-foot-note{font-size:10px;color:var(--sb-text-dim);line-height:1.5;margin-bottom:9px}
 .sidebar-foot .grp{margin-top:10px;padding-top:10px;border-top:1px solid var(--sb-border);display:flex;flex-direction:column;gap:2px}
@@ -1444,6 +1450,8 @@ body{background:var(--bg);color:var(--ink);}
 </style>
 </head>
 <body>
+<!-- BukuStok sidebar icon patch v2.5.2: inline SVG icons, desktop + mobile -->
+
 
 <div id="loadingScreen">Memuat BukuStok…</div>
 
@@ -1536,26 +1544,26 @@ body{background:var(--bg);color:var(--ink);}
       <button class="btn small outline" id="btnKelolaOutlet" type="button" style="width:100%;margin-top:6px;">⚙ Kelola Outlet</button>
     </div>
     <div class="nav-section-label">MENU UTAMA</div>
-    <button class="navbtn active" data-view="dashboard"><span class="ic">▣</span> Dashboard</button>
-    <button class="navbtn" data-view="produk"><span class="ic">▢</span> Produk</button>
-    <button class="navbtn" data-view="pembelian"><span class="ic">↓</span> Pembelian Stok</button>
-    <button class="navbtn" data-view="penjualan"><span class="ic">↑</span> Penjualan</button>
-    <button class="navbtn" data-view="biaya" id="biayaNavBtn"><span class="ic">▬</span> Biaya Operasional</button>
-    <button class="navbtn" data-view="piutang" id="piutangNavBtn"><span class="ic">💳</span> Utang/Piutang</button>
-    <button class="navbtn" data-view="tim" id="timNavBtn" hidden><span class="ic">◈</span> Tim &amp; Pengguna</button>
-    <button class="navbtn" data-view="log" id="logNavBtn" hidden><span class="ic">🕒</span> Log Aktivitas</button>
-    <button class="navbtn" data-view="langganan" id="langgananNavBtn"><span class="ic">◆</span> Paket &amp; Billing</button>
+    <button class="navbtn active" data-view="dashboard"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5"/><path d="M9.5 20v-6h5v6"/></svg></span> Dashboard</button>
+    <button class="navbtn" data-view="produk"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg></span> Produk</button>
+    <button class="navbtn" data-view="pembelian"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M2.5 4h2l2.3 10.2a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 2-1.6L21 8H6"/><path d="M12 3v7m-3-3 3 3 3-3"/></svg></span> Pembelian Stok</button>
+    <button class="navbtn" data-view="penjualan"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11m7 9V4m7 16v-6"/><path d="m15.5 7 3.5-3 2.5 2.5"/></svg></span> Penjualan</button>
+    <button class="navbtn" data-view="biaya" id="biayaNavBtn"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 15h2"/></svg></span> Biaya Operasional</button>
+    <button class="navbtn" data-view="piutang" id="piutangNavBtn"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v5c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 11v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/></svg></span> Utang/Piutang</button>
+    <button class="navbtn" data-view="tim" id="timNavBtn" hidden><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Tim &amp; Pengguna</button>
+    <button class="navbtn" data-view="log" id="logNavBtn" hidden><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span> Log Aktivitas</button>
+    <button class="navbtn" data-view="langganan" id="langgananNavBtn"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2.5 2.5 0 0 0 0 5v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2.5 2.5 0 0 0 0-5V7Z"/><path d="m12 8 1.1 2.2 2.4.3-1.8 1.7.5 2.4-2.2-1.2-2.2 1.2.5-2.4-1.8-1.7 2.4-.3L12 8Z"/></svg></span> Paket &amp; Billing</button>
     <div class="nav-section-label admin-section-label" id="adminSectionLabel" hidden>ADMIN</div>
-    <button class="navbtn" data-view="admin" id="adminNavBtn" hidden><span class="ic">⚙</span> Admin Pelanggan</button>
+    <button class="navbtn" data-view="admin" id="adminNavBtn" hidden><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21h-4v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H3v-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1L7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V3h4v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9A1.7 1.7 0 0 0 21 10h.1v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></span> Admin Pelanggan</button>
   </div>
   <div class="sidebar-foot">
     <div class="sidebar-foot-note">Harga beli dihitung otomatis per batch (FIFO). Data tersimpan aman di Supabase.</div>
     <div class="grp">
-      <button class="navbtn" data-view="profil" id="profilNavBtn"><span class="ic">👤</span> Profil Saya</button>
-      <button class="navbtn" id="btnExport" style="padding:8px 10px;" hidden><span class="ic">⭳</span> Unduh Cadangan</button>
-      <button class="navbtn" id="btnRestore" style="padding:8px 10px;" hidden><span class="ic">⭱</span> Pulihkan Data</button>
+      <button class="navbtn" data-view="profil" id="profilNavBtn"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span> Profil Saya</button>
+      <button class="navbtn" id="btnExport" style="padding:8px 10px;" hidden><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span> Unduh Cadangan</button>
+      <button class="navbtn" id="btnRestore" style="padding:8px 10px;" hidden><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></svg></span> Pulihkan Data</button>
       <input type="file" id="fileRestore" accept=".json" style="display:none;">
-      <button class="navbtn" id="btnLogout" style="padding:8px 10px;"><span class="ic">⏻</span> Keluar</button>
+      <button class="navbtn" id="btnLogout" style="padding:8px 10px;"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h5"/><path d="m15 8 4 4-4 4M19 12H9"/></svg></span> Keluar</button>
     </div>
     <div class="app-footer" id="appFooter">© <span id="footerYear"></span> BukuStok. Hak cipta dilindungi.<br>Versi <span id="footerVersion"></span></div>
   </div>

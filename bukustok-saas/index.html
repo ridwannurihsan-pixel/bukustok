@@ -131,22 +131,83 @@ body.is-staff-view .btn-hapus-data{display:none !important}
 .chart-empty .big{font-size:28px;opacity:.5}
 .plan-price-compare{font-size:11px;color:var(--gold-2);font-weight:650;margin:-6px 0 10px;}
 @media print{
-  body.print-invoice *{visibility:hidden !important;}
-  body.print-invoice #invoicePrintArea,
-  body.print-invoice #invoicePrintArea *{visibility:visible !important;}
-  body.print-invoice #invoicePrintArea{
-    position:absolute !important;
-    left:0 !important;
-    top:0 !important;
-    width:100% !important;
-    max-width:none !important;
+  @page{
+    size:A4;
+    margin:10mm;
+  }
+
+  html,
+  body.print-invoice{
+    width:auto !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:visible !important;
+    background:#fff !important;
+  }
+
+  body.print-invoice{
     margin:0 !important;
+    padding:0 !important;
+  }
+
+  /* Remove the dashboard/app layout from the print flow. */
+  body.print-invoice > *{
+    display:none !important;
+  }
+
+  /* Re-enable only the invoice modal/wrapper. */
+  body.print-invoice .modal,
+  body.print-invoice #invoiceModal,
+  body.print-invoice #invoicePrintArea{
+    display:block !important;
+  }
+
+  body.print-invoice .modal-backdrop{
+    display:none !important;
+  }
+
+  body.print-invoice #invoiceModal{
+    position:static !important;
+    inset:auto !important;
+    width:auto !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow:visible !important;
+    background:#fff !important;
+  }
+
+  body.print-invoice #invoicePrintArea{
+    display:block !important;
+    position:static !important;
+    width:100% !important;
+    max-width:190mm !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    margin:0 auto !important;
+    padding:0 !important;
+    overflow:visible !important;
     box-shadow:none !important;
     border:none !important;
     transform:none !important;
     background:#fff !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+    page-break-before:avoid !important;
+    page-break-after:avoid !important;
   }
-  body.print-invoice .no-print{display:none !important;}
+
+  body.print-invoice #invoicePrintArea,
+  body.print-invoice #invoicePrintArea *{
+    visibility:visible !important;
+  }
+
+  body.print-invoice .no-print,
+  body.print-invoice button,
+  body.print-invoice [data-no-print]{
+    display:none !important;
+  }
 }
 
 /* Loading */

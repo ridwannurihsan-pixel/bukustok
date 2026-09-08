@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BukuStok SaaS</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon/favicon-48.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1461,6 +1457,15 @@ body{background:var(--bg);color:var(--ink);}
   .mobile-topbar{background:linear-gradient(180deg,#1B242B 0%,#10161B 100%);}
 }
 </style>
+
+  <!-- BukuStok favicon -->
+  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon/favicon-48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#006f5f">
 </head>
 <body>
 <!-- BukuStok sidebar icon patch v2.5.2: inline SVG icons, desktop + mobile -->
@@ -2232,7 +2237,7 @@ body{background:var(--bg);color:var(--ink);}
       <div class="billing-row" style="padding:10px 0;"><span class="muted">Paket</span><strong id="checkoutPlanName">-</strong></div>
       <div class="field" id="checkoutCycleWrap" style="margin-top:8px;"><label>Periode Pembayaran</label><select id="checkoutBillingCycle"><option value="monthly">Bulanan</option><option value="annual">Tahunan — hemat 20%</option></select></div>
       <div class="checkout-voucher"><label for="checkoutVoucherCode">Punya voucher?</label><div class="checkout-voucher-row"><input id="checkoutVoucherCode" maxlength="40" placeholder="Masukkan kode voucher" autocomplete="off"><button class="btn outline" type="button" id="btnApplyVoucher">Gunakan</button></div><div id="checkoutVoucherMsg" style="font-size:10.5px;color:var(--ink-muted);margin-top:7px;">Voucher akan divalidasi aman oleh server saat pembayaran dibuat.</div></div>
-      <div class="checkout-summary"><div class="billing-row"><span class="muted">Estimasi sebelum voucher</span><strong id="checkoutSubtotal">-</strong></div><div class="billing-row" id="checkoutVoucherRow" style="display:none"><span class="muted">Voucher</span><strong id="checkoutVoucherDiscount">-</strong></div><div class="billing-row"><span class="muted">PPN 11%</span><strong id="checkoutTax">-</strong></div><div class="billing-row"><span class="muted">Total Bayar</span><strong id="checkoutAmount">-</strong></div></div>
+      <div class="checkout-summary"><div class="billing-row"><span class="muted">Subtotal sebelum voucher</span><strong id="checkoutSubtotal">-</strong></div><div class="billing-row" id="checkoutVoucherRow" style="display:none"><span class="muted">Voucher</span><strong id="checkoutVoucherDiscount">-</strong></div><div class="billing-row"><span class="muted">PPN 11%</span><strong id="checkoutTax">-</strong></div><div class="billing-row"><span class="muted">Total Bayar</span><strong id="checkoutAmount">-</strong></div></div>
       <div class="billing-row" style="padding:10px 0;"><span class="muted">No. Invoice</span><strong id="checkoutInvoiceNo">-</strong></div>
       <div id="checkoutStatusBox" style="margin-top:16px;padding:12px 14px;border-radius:9px;background:var(--surface-3);font-size:12.5px;color:var(--ink-muted);">
         Klik "Bayar dengan iPaymu" untuk melanjutkan ke halaman pembayaran aman.
@@ -5734,19 +5739,74 @@ async function selectCommercialPlan(planName){
 // CHECKOUT — iPaymu
 // ============================================================
 let checkoutPollTimer = null;
+let checkoutVoucherPreview = null;
 
-async function checkoutEstimate(){
+function checkoutBaseEstimate(){
   const planName=document.getElementById('btnBayarIpaymu').dataset.plan;
-  const plan=COMMERCIAL_PLANS[planName]; if(!plan)return;
+  const plan=COMMERCIAL_PLANS[planName]; if(!plan)return null;
   const cycle=plan.lifetime?'lifetime':document.getElementById('checkoutBillingCycle').value;
   const base=plan.lifetime?plan.price:plan.price*(cycle==='annual'?12:1);
   const annualDiscount=cycle==='annual'?Math.round(base*.20):0;
   const subtotal=base-annualDiscount, tax=Math.round(subtotal*.11), total=subtotal+tax;
-  document.getElementById('checkoutSubtotal').textContent=fmtRpAdmin(subtotal);
-  document.getElementById('checkoutTax').textContent=fmtRpAdmin(tax);
-  document.getElementById('checkoutAmount').textContent=fmtRpAdmin(total);
+  return {planName,cycle,base,annualDiscount,subtotal,tax,total};
+}
+function clearVoucherPreview(message){
+  checkoutVoucherPreview=null;
+  const est=checkoutBaseEstimate(); if(!est)return;
+  document.getElementById('checkoutSubtotal').textContent=fmtRpAdmin(est.subtotal);
+  document.getElementById('checkoutTax').textContent=fmtRpAdmin(est.tax);
+  document.getElementById('checkoutAmount').textContent=fmtRpAdmin(est.total);
   document.getElementById('checkoutVoucherRow').style.display='none';
-  document.getElementById('checkoutVoucherMsg').textContent='Voucher akan divalidasi aman oleh server saat pembayaran dibuat.';
+  document.getElementById('checkoutVoucherDiscount').textContent='-';
+  const msg=document.getElementById('checkoutVoucherMsg');
+  msg.style.color='var(--ink-muted)';
+  msg.textContent=message||'Masukkan kode voucher lalu klik Gunakan.';
+}
+async function checkoutEstimate(){
+  clearVoucherPreview('Masukkan kode voucher lalu klik Gunakan.');
+}
+async function previewCheckoutVoucher(){
+  const input=document.getElementById('checkoutVoucherCode');
+  const applyBtn=document.getElementById('btnApplyVoucher');
+  const code=input.value.trim().toUpperCase();
+  input.value=code;
+  if(!code){ clearVoucherPreview('Masukkan kode voucher terlebih dahulu.'); return; }
+
+  const est=checkoutBaseEstimate(); if(!est)return;
+  applyBtn.disabled=true; applyBtn.textContent='Memeriksa…';
+  const msg=document.getElementById('checkoutVoucherMsg');
+  msg.style.color='var(--ink-muted)'; msg.textContent='Memvalidasi voucher…';
+
+  try{
+    const {data:sessionData}=await sb.auth.getSession();
+    const token=sessionData?.session?.access_token;
+    if(!token) throw new Error('Sesi login tidak ditemukan.');
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/create-ipaymu-payment`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`,'apikey':SUPABASE_ANON_KEY},
+      body:JSON.stringify({action:'preview',plan:est.planName,billingCycle:est.cycle,voucherCode:code})
+    });
+    const data=await res.json();
+    if(!res.ok||!data.valid){
+      clearVoucherPreview(data.error||'Voucher tidak dapat digunakan.');
+      msg.style.color='#b42318';
+      return;
+    }
+    checkoutVoucherPreview=data;
+    document.getElementById('checkoutSubtotal').textContent=fmtRpAdmin(Number(data.subtotalBeforeVoucher||est.subtotal));
+    document.getElementById('checkoutVoucherDiscount').textContent='- '+fmtRpAdmin(Number(data.voucherDiscount||0));
+    document.getElementById('checkoutVoucherRow').style.display='';
+    document.getElementById('checkoutTax').textContent=fmtRpAdmin(Number(data.taxAmount||0));
+    document.getElementById('checkoutAmount').textContent=fmtRpAdmin(Number(data.amount||0));
+    const detail=data.discountType==='percent'?`${Number(data.discountValue||0)}%`:'potongan tetap';
+    msg.style.color='#067647';
+    msg.textContent=`✓ Voucher ${data.voucherCode} berhasil digunakan (${detail}).`;
+  }catch(e){
+    clearVoucherPreview('Gagal memvalidasi voucher. Periksa koneksi lalu coba lagi.');
+    msg.style.color='#b42318';
+  }finally{
+    applyBtn.disabled=false; applyBtn.textContent='Gunakan';
+  }
 }
 function openCheckout(planName){
   const plan=COMMERCIAL_PLANS[planName]; if(!plan)return;
@@ -5754,18 +5814,24 @@ function openCheckout(planName){
   document.getElementById('checkoutCycleWrap').style.display=plan.lifetime?'none':'';
   document.getElementById('checkoutBillingCycle').value='monthly';
   document.getElementById('checkoutVoucherCode').value='';
+  checkoutVoucherPreview=null;
   document.getElementById('checkoutInvoiceNo').textContent='-';
   document.getElementById('checkoutStatusBox').textContent='Klik "Bayar dengan iPaymu" untuk melanjutkan ke halaman pembayaran aman.';
   const btn=document.getElementById('btnBayarIpaymu'); btn.style.display='';btn.disabled=false;btn.textContent='Bayar dengan iPaymu';btn.dataset.plan=planName;
   checkoutEstimate(); document.getElementById('checkoutModal').classList.add('open');
 }
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('open')}
-document.getElementById('checkoutBillingCycle').onchange=checkoutEstimate;
-document.getElementById('btnApplyVoucher').onclick=()=>{
-  const code=document.getElementById('checkoutVoucherCode').value.trim().toUpperCase();
-  document.getElementById('checkoutVoucherCode').value=code;
-  document.getElementById('checkoutVoucherMsg').textContent=code?'Kode '+code+' akan divalidasi server saat Anda menekan tombol bayar.':'Masukkan kode voucher terlebih dahulu.';
+document.getElementById('checkoutBillingCycle').onchange=()=>{
+  clearVoucherPreview('Periode berubah. Klik Gunakan untuk memvalidasi ulang voucher.');
+  if(document.getElementById('checkoutVoucherCode').value.trim()) previewCheckoutVoucher();
 };
+document.getElementById('checkoutVoucherCode').addEventListener('input',()=>{
+  if(checkoutVoucherPreview) clearVoucherPreview('Kode voucher berubah. Klik Gunakan untuk memvalidasi ulang.');
+});
+document.getElementById('checkoutVoucherCode').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ e.preventDefault(); previewCheckoutVoucher(); }
+});
+document.getElementById('btnApplyVoucher').onclick=previewCheckoutVoucher;
 
 document.getElementById('btnBayarIpaymu').addEventListener('click', async ()=>{
   const planName = document.getElementById('btnBayarIpaymu').dataset.plan;

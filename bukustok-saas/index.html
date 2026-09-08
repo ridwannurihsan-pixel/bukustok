@@ -131,10 +131,83 @@ body.is-staff-view .btn-hapus-data{display:none !important}
 .chart-empty .big{font-size:28px;opacity:.5}
 .plan-price-compare{font-size:11px;color:var(--gold-2);font-weight:650;margin:-6px 0 10px;}
 @media print{
-  body *{visibility:hidden;}
-  #invoicePrintArea, #invoicePrintArea *{visibility:visible;}
-  #invoicePrintArea{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:none;}
-  .no-print{display:none !important;}
+  @page{
+    size:A4;
+    margin:10mm;
+  }
+
+  html,
+  body.print-invoice{
+    width:auto !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:visible !important;
+    background:#fff !important;
+  }
+
+  body.print-invoice{
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  /* Remove the dashboard/app layout from the print flow. */
+  body.print-invoice > *{
+    display:none !important;
+  }
+
+  /* Re-enable only the invoice modal/wrapper. */
+  body.print-invoice .modal,
+  body.print-invoice #invoiceModal,
+  body.print-invoice #invoicePrintArea{
+    display:block !important;
+  }
+
+  body.print-invoice .modal-backdrop{
+    display:none !important;
+  }
+
+  body.print-invoice #invoiceModal{
+    position:static !important;
+    inset:auto !important;
+    width:auto !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow:visible !important;
+    background:#fff !important;
+  }
+
+  body.print-invoice #invoicePrintArea{
+    display:block !important;
+    position:static !important;
+    width:100% !important;
+    max-width:190mm !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    margin:0 auto !important;
+    padding:0 !important;
+    overflow:visible !important;
+    box-shadow:none !important;
+    border:none !important;
+    transform:none !important;
+    background:#fff !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+    page-break-before:avoid !important;
+    page-break-after:avoid !important;
+  }
+
+  body.print-invoice #invoicePrintArea,
+  body.print-invoice #invoicePrintArea *{
+    visibility:visible !important;
+  }
+
+  body.print-invoice .no-print,
+  body.print-invoice button,
+  body.print-invoice [data-no-print]{
+    display:none !important;
+  }
 }
 
 /* Loading */
@@ -502,10 +575,21 @@ tr.filter-row th:first-child,tr.filter-row th:last-child{border-radius:0}
   line-height:1.55;white-space:pre-wrap;word-break:break-word;color:#111;max-width:280px;
 }
 @media print{
-  body *{visibility:hidden !important;}
-  #strukPrintWrap, #strukPrintWrap *{visibility:visible !important;}
-  #strukPrintWrap{position:absolute;top:0;left:0;width:58mm;}
-  .struk-58{border:none;max-width:100%;font-size:11px;padding:0;}
+  body.print-struk *{visibility:hidden !important;}
+  body.print-struk #strukPrintWrap,
+  body.print-struk #strukPrintWrap *{visibility:visible !important;}
+  body.print-struk #strukPrintWrap{
+    position:absolute !important;
+    top:0 !important;
+    left:0 !important;
+    width:58mm !important;
+  }
+  body.print-struk .struk-58{
+    border:none !important;
+    max-width:100% !important;
+    font-size:11px !important;
+    padding:0 !important;
+  }
 }
 
 .foto-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border);display:block}
@@ -1337,6 +1421,15 @@ tr.filter-row th:first-child,tr.filter-row th:last-child{border-radius:0}
 #scannerRegion{width:100%;border-radius:10px;overflow:hidden;background:#000;min-height:180px}
 #scannerRegion video{border-radius:10px}
 
+
+/* Voucher Management v2.6.0 */
+.checkout-voucher{margin-top:14px;padding:13px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2)}
+.checkout-voucher label{display:block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.45px;color:var(--ink-muted);margin-bottom:7px}
+.checkout-voucher-row{display:grid;grid-template-columns:1fr auto;gap:8px}.checkout-voucher-row input,.checkout-voucher-row select{min-width:0;height:40px}
+.checkout-summary{margin-top:12px;border-top:1px dashed var(--border);padding-top:8px}.checkout-summary .billing-row{padding:6px 0!important}
+.voucher-admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 16px 10px}.voucher-code{font-family:'JetBrains Mono',monospace;font-weight:800;letter-spacing:.5px}.voucher-status{font-size:10px;font-weight:800;padding:4px 8px;border-radius:999px}.voucher-status.active{background:var(--green-soft);color:var(--green)}.voucher-status.inactive{background:var(--surface-3);color:var(--ink-muted)}
+.voucher-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.voucher-checks{display:flex;gap:12px;flex-wrap:wrap;font-size:11px}.voucher-checks label{display:flex;align-items:center;gap:5px}
+@media(max-width:600px){.checkout-voucher-row,.voucher-form-grid{grid-template-columns:1fr}.checkout-voucher-row .btn{width:100%}.voucher-admin-head{align-items:stretch;flex-direction:column}.voucher-admin-head .btn{width:100%}}
 </style>
 
 <style id="bukustok-template-override">
@@ -1448,6 +1541,15 @@ body{background:var(--bg);color:var(--ink);}
   .mobile-topbar{background:linear-gradient(180deg,#1B242B 0%,#10161B 100%);}
 }
 </style>
+
+  <!-- BukuStok favicon -->
+  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon/favicon-48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#006f5f">
 </head>
 <body>
 <!-- BukuStok sidebar icon patch v2.5.2: inline SVG icons, desktop + mobile -->
@@ -2056,7 +2158,7 @@ body{background:var(--bg);color:var(--ink);}
         <div class="plan-card featured" data-commercial-plan="lifetime">
           <div class="popular">Lifetime</div>
           <h3>Lifetime Access</h3>
-          <div class="plan-price" id="lifetimePriceText">Rp1.499.000 <small>sekali bayar</small></div>
+          <div class="plan-price" id="lifetimePriceText">Rp999.000 <small>sekali bayar</small></div>
           <div class="plan-desc">Akses unlimited tanpa masa berlaku dan tanpa renewal.</div>
           <ul class="plan-features">
             <li>Produk tanpa batas</li>
@@ -2102,6 +2204,11 @@ body{background:var(--bg);color:var(--ink);}
       <div class="tablewrap"><table><thead><tr><th>Pelanggan</th><th>Paket</th><th>Status</th><th>Mulai</th><th>Berakhir</th><th class="num">Aksi</th></tr></thead><tbody id="adminCustomerRows"></tbody></table></div>
       <div id="adminCustomerEmpty" class="admin-empty" style="display:none">Belum ada pelanggan yang sesuai filter.</div>
     </div>
+    <div class="admin-table-card" id="adminVoucherCard" style="margin-top:18px;">
+      <div class="voucher-admin-head"><div><div style="font-size:10px;font-weight:800;letter-spacing:.65px;text-transform:uppercase;color:#7b8798">Voucher &amp; Promo</div><div style="font-size:11px;color:var(--ink-muted);margin-top:4px">Kelola kode promo untuk pembayaran paket BukuStok.</div></div><button class="btn gold" id="btnAdminNewVoucher">+ Buat Voucher</button></div>
+      <div class="tablewrap"><table><thead><tr><th>Kode</th><th>Diskon</th><th>Paket</th><th>Periode</th><th>Pemakaian</th><th>Status</th><th class="num">Aksi</th></tr></thead><tbody id="adminVoucherRows"></tbody></table></div>
+      <div id="adminVoucherEmpty" class="admin-empty" style="display:none">Belum ada voucher. Klik “Buat Voucher” untuk membuat promo pertama.</div>
+    </div>
   </div>
 
 </div>
@@ -2132,6 +2239,29 @@ body{background:var(--bg);color:var(--ink);}
       </div>
     </div>
     <div style="margin-top:14px;font-size:10.5px;color:var(--ink-muted)">Perubahan paket wajib divalidasi server/database pada production.</div>
+  </div>
+</div>
+
+<div class="admin-detail-modal" id="voucherAdminModal">
+  <div class="admin-detail-dialog">
+    <div class="admin-detail-head"><div><div style="font-size:10px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.6px;font-weight:750">Voucher &amp; Promo</div><h2 id="voucherModalTitle" style="font-size:20px;margin-top:4px">Buat Voucher</h2></div><button class="upgrade-close" id="btnCloseVoucherModal">×</button></div>
+    <input type="hidden" id="voucherId">
+    <div class="voucher-form-grid">
+      <div class="field"><label>Kode Voucher</label><input id="voucherCode" maxlength="40" placeholder="LAUNCH50"></div>
+      <div class="field"><label>Nama Promo</label><input id="voucherName" maxlength="100" placeholder="Promo Launching"></div>
+      <div class="field"><label>Tipe Diskon</label><select id="voucherType"><option value="percent">Persentase (%)</option><option value="fixed">Nominal (Rp)</option></select></div>
+      <div class="field"><label>Nilai Diskon</label><input id="voucherValue" type="number" min="1" step="1" placeholder="50"></div>
+      <div class="field"><label>Maks. Diskon (opsional)</label><input id="voucherMaxDiscount" type="number" min="0" step="1000" placeholder="Kosong = tanpa batas"></div>
+      <div class="field"><label>Minimum Transaksi</label><input id="voucherMinSubtotal" type="number" min="0" step="1000" value="0"></div>
+      <div class="field"><label>Mulai Berlaku</label><input id="voucherStartsAt" type="datetime-local"></div>
+      <div class="field"><label>Berakhir</label><input id="voucherEndsAt" type="datetime-local"></div>
+      <div class="field"><label>Kuota Total</label><input id="voucherUsageLimit" type="number" min="1" placeholder="Kosong = unlimited"></div>
+      <div class="field"><label>Limit per User</label><input id="voucherPerUserLimit" type="number" min="1" placeholder="Kosong = unlimited"></div>
+    </div>
+    <div class="field" style="margin-top:10px"><label>Berlaku untuk Paket</label><div class="voucher-checks"><label><input type="checkbox" data-vplan="pro" checked> Pro</label><label><input type="checkbox" data-vplan="business" checked> Business</label><label><input type="checkbox" data-vplan="lifetime" checked> Lifetime</label></div></div>
+    <div class="field" style="margin-top:10px"><label>Billing Cycle</label><div class="voucher-checks"><label><input type="checkbox" data-vcycle="monthly" checked> Bulanan</label><label><input type="checkbox" data-vcycle="annual" checked> Tahunan</label><label><input type="checkbox" data-vcycle="lifetime" checked> Lifetime</label></div></div>
+    <div class="field" style="margin-top:10px"><label><span style="display:flex;align-items:center;gap:7px"><input id="voucherActive" type="checkbox" checked> Voucher aktif</span></label></div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"><button class="btn ghost" id="btnCancelVoucher">Batal</button><button class="btn gold" id="btnSaveVoucher">Simpan Voucher</button></div>
   </div>
 </div>
 
@@ -2176,7 +2306,7 @@ body{background:var(--bg);color:var(--ink);}
     <p>Pilih paket, lalu bayar aman lewat iPaymu. Paket aktif otomatis setelah pembayaran terkonfirmasi.</p>
     <button class="upgrade-option" data-plan="pro"><strong>Pro</strong><span>Rp49.000 / bulan</span></button>
     <button class="upgrade-option" data-plan="business"><strong>Business</strong><span>Rp99.000 / bulan</span></button>
-    <button class="upgrade-option" data-plan="lifetime"><strong>Lifetime Access</strong><span id="upgradeLifetimePrice">Rp1.499.000 • sekali bayar</span></button>
+    <button class="upgrade-option" data-plan="lifetime"><strong>Lifetime Access</strong><span id="upgradeLifetimePrice">Rp999.000 • sekali bayar</span></button>
     <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn ghost" id="btnCancelUpgrade">Batal</button>
     </div>
@@ -2189,7 +2319,9 @@ body{background:var(--bg);color:var(--ink);}
     <h2>Checkout</h2>
     <div id="checkoutBody">
       <div class="billing-row" style="padding:10px 0;"><span class="muted">Paket</span><strong id="checkoutPlanName">-</strong></div>
-      <div class="billing-row" style="padding:10px 0;"><span class="muted">Total Bayar</span><strong id="checkoutAmount">-</strong></div>
+      <div class="field" id="checkoutCycleWrap" style="margin-top:8px;"><label>Periode Pembayaran</label><select id="checkoutBillingCycle"><option value="monthly">Bulanan</option><option value="annual">Tahunan — hemat 20%</option></select></div>
+      <div class="checkout-voucher"><label for="checkoutVoucherCode">Punya voucher?</label><div class="checkout-voucher-row"><input id="checkoutVoucherCode" maxlength="40" placeholder="Masukkan kode voucher" autocomplete="off"><button class="btn outline" type="button" id="btnApplyVoucher">Gunakan</button></div><div id="checkoutVoucherMsg" style="font-size:10.5px;color:var(--ink-muted);margin-top:7px;">Voucher akan divalidasi aman oleh server saat pembayaran dibuat.</div></div>
+      <div class="checkout-summary"><div class="billing-row"><span class="muted">Subtotal sebelum voucher</span><strong id="checkoutSubtotal">-</strong></div><div class="billing-row" id="checkoutVoucherRow" style="display:none"><span class="muted">Voucher</span><strong id="checkoutVoucherDiscount">-</strong></div><div class="billing-row"><span class="muted">PPN 11%</span><strong id="checkoutTax">-</strong></div><div class="billing-row"><span class="muted">Total Bayar</span><strong id="checkoutAmount">-</strong></div></div>
       <div class="billing-row" style="padding:10px 0;"><span class="muted">No. Invoice</span><strong id="checkoutInvoiceNo">-</strong></div>
       <div id="checkoutStatusBox" style="margin-top:16px;padding:12px 14px;border-radius:9px;background:var(--surface-3);font-size:12.5px;color:var(--ink-muted);">
         Klik "Bayar dengan iPaymu" untuk melanjutkan ke halaman pembayaran aman.
@@ -3176,7 +3308,7 @@ document.querySelectorAll('.navbtn[data-view]').forEach(btn=>{
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('view-'+btn.dataset.view)?.classList.add('active');
-    if(btn.dataset.view==='admin') await loadAdminCustomers();
+    if(btn.dataset.view==='admin'){ await loadAdminCustomers(); await loadAdminVouchers(); }
     if(btn.dataset.view==='langganan'){ await renderCommercial(); await loadOrderHistory(); }
     if(btn.dataset.view==='tim') await loadTimAnggota();
     if(btn.dataset.view==='log') await loadActivityLog();
@@ -4494,7 +4626,12 @@ document.getElementById('btnTutupStruk').addEventListener('click', ()=>{
   strukIdAktif = null;
 });
 document.getElementById('btnCetakBrowser').addEventListener('click', ()=>{
+  document.body.classList.remove('print-invoice');
+  document.body.classList.add('print-struk');
+  const cleanupPrintStruk=()=>document.body.classList.remove('print-struk');
+  window.addEventListener('afterprint', cleanupPrintStruk, {once:true});
   window.print();
+  setTimeout(cleanupPrintStruk, 1500);
   if(strukIdAktif){
     const t = penjualanList.find(x=>x.id===strukIdAktif);
     if(t) logActivity('struk.cetak', `Mencetak struk transaksi penjualan (${(t.items||[]).length} produk, total ${fmtRpAdmin(t.total)}) via dialog print`, {entityType:'penjualan', entityId:t.id});
@@ -5469,7 +5606,7 @@ const COMMERCIAL_PLANS = {
   free:{name:'Free', price:0, productLimit:50, transactionLimit:50, outletLimit:1, trialDays:0, lifetime:false},
   pro:{name:'Pro', price:49000, productLimit:Infinity, transactionLimit:Infinity, outletLimit:3, trialDays:0, lifetime:false},
   business:{name:'Business', price:99000, productLimit:Infinity, transactionLimit:Infinity, outletLimit:10, trialDays:0, lifetime:false},
-  lifetime:{name:'Lifetime Access', price:1499000, productLimit:Infinity, transactionLimit:Infinity, outletLimit:Infinity, trialDays:0, lifetime:true},
+  lifetime:{name:'Lifetime Access', price:999000, productLimit:Infinity, transactionLimit:Infinity, outletLimit:Infinity, trialDays:0, lifetime:true},
   trial:{name:'Trial', price:0, productLimit:Infinity, transactionLimit:Infinity, outletLimit:1, trialDays:7, lifetime:false}
 };
 function fmtRpAdmin(n){ return 'Rp' + Math.round(n||0).toLocaleString('id-ID'); }
@@ -5691,20 +5828,99 @@ async function selectCommercialPlan(planName){
 // CHECKOUT — iPaymu
 // ============================================================
 let checkoutPollTimer = null;
+let checkoutVoucherPreview = null;
 
-async function openCheckout(planName){
-  const plan = COMMERCIAL_PLANS[planName];
-  if(!plan) return;
-  document.getElementById('checkoutPlanName').textContent = plan.name;
-  document.getElementById('checkoutAmount').textContent = fmtRpAdmin(plan.price) + (plan.lifetime ? ' (sekali bayar)' : ' / bulan');
-  document.getElementById('checkoutInvoiceNo').textContent = '-';
-  document.getElementById('checkoutStatusBox').textContent = 'Klik "Bayar dengan iPaymu" untuk melanjutkan ke halaman pembayaran aman.';
-  document.getElementById('btnBayarIpaymu').disabled = false;
-  document.getElementById('btnBayarIpaymu').textContent = 'Bayar dengan iPaymu';
-  document.getElementById('btnBayarIpaymu').dataset.plan = planName;
-  document.getElementById('checkoutModal').classList.add('open');
+function checkoutBaseEstimate(){
+  const planName=document.getElementById('btnBayarIpaymu').dataset.plan;
+  const plan=COMMERCIAL_PLANS[planName]; if(!plan)return null;
+  const cycle=plan.lifetime?'lifetime':document.getElementById('checkoutBillingCycle').value;
+  const base=plan.lifetime?plan.price:plan.price*(cycle==='annual'?12:1);
+  const annualDiscount=cycle==='annual'?Math.round(base*.20):0;
+  const subtotal=base-annualDiscount, tax=Math.round(subtotal*.11), total=subtotal+tax;
+  return {planName,cycle,base,annualDiscount,subtotal,tax,total};
 }
-function closeCheckout(){ document.getElementById('checkoutModal').classList.remove('open'); }
+function clearVoucherPreview(message){
+  checkoutVoucherPreview=null;
+  const est=checkoutBaseEstimate(); if(!est)return;
+  document.getElementById('checkoutSubtotal').textContent=fmtRpAdmin(est.subtotal);
+  document.getElementById('checkoutTax').textContent=fmtRpAdmin(est.tax);
+  document.getElementById('checkoutAmount').textContent=fmtRpAdmin(est.total);
+  document.getElementById('checkoutVoucherRow').style.display='none';
+  document.getElementById('checkoutVoucherDiscount').textContent='-';
+  const msg=document.getElementById('checkoutVoucherMsg');
+  msg.style.color='var(--ink-muted)';
+  msg.textContent=message||'Masukkan kode voucher lalu klik Gunakan.';
+}
+async function checkoutEstimate(){
+  clearVoucherPreview('Masukkan kode voucher lalu klik Gunakan.');
+}
+async function previewCheckoutVoucher(){
+  const input=document.getElementById('checkoutVoucherCode');
+  const applyBtn=document.getElementById('btnApplyVoucher');
+  const code=input.value.trim().toUpperCase();
+  input.value=code;
+  if(!code){ clearVoucherPreview('Masukkan kode voucher terlebih dahulu.'); return; }
+
+  const est=checkoutBaseEstimate(); if(!est)return;
+  applyBtn.disabled=true; applyBtn.textContent='Memeriksa…';
+  const msg=document.getElementById('checkoutVoucherMsg');
+  msg.style.color='var(--ink-muted)'; msg.textContent='Memvalidasi voucher…';
+
+  try{
+    const {data:sessionData}=await sb.auth.getSession();
+    const token=sessionData?.session?.access_token;
+    if(!token) throw new Error('Sesi login tidak ditemukan.');
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/create-ipaymu-payment`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`,'apikey':SUPABASE_ANON_KEY},
+      body:JSON.stringify({action:'preview',plan:est.planName,billingCycle:est.cycle,voucherCode:code})
+    });
+    const data=await res.json();
+    if(!res.ok||!data.valid){
+      clearVoucherPreview(data.error||'Voucher tidak dapat digunakan.');
+      msg.style.color='#b42318';
+      return;
+    }
+    checkoutVoucherPreview=data;
+    document.getElementById('checkoutSubtotal').textContent=fmtRpAdmin(Number(data.subtotalBeforeVoucher||est.subtotal));
+    document.getElementById('checkoutVoucherDiscount').textContent='- '+fmtRpAdmin(Number(data.voucherDiscount||0));
+    document.getElementById('checkoutVoucherRow').style.display='';
+    document.getElementById('checkoutTax').textContent=fmtRpAdmin(Number(data.taxAmount||0));
+    document.getElementById('checkoutAmount').textContent=fmtRpAdmin(Number(data.amount||0));
+    const detail=data.discountType==='percent'?`${Number(data.discountValue||0)}%`:'potongan tetap';
+    msg.style.color='#067647';
+    msg.textContent=`✓ Voucher ${data.voucherCode} berhasil digunakan (${detail}).`;
+  }catch(e){
+    clearVoucherPreview('Gagal memvalidasi voucher. Periksa koneksi lalu coba lagi.');
+    msg.style.color='#b42318';
+  }finally{
+    applyBtn.disabled=false; applyBtn.textContent='Gunakan';
+  }
+}
+function openCheckout(planName){
+  const plan=COMMERCIAL_PLANS[planName]; if(!plan)return;
+  document.getElementById('checkoutPlanName').textContent=plan.name;
+  document.getElementById('checkoutCycleWrap').style.display=plan.lifetime?'none':'';
+  document.getElementById('checkoutBillingCycle').value='monthly';
+  document.getElementById('checkoutVoucherCode').value='';
+  checkoutVoucherPreview=null;
+  document.getElementById('checkoutInvoiceNo').textContent='-';
+  document.getElementById('checkoutStatusBox').textContent='Klik "Bayar dengan iPaymu" untuk melanjutkan ke halaman pembayaran aman.';
+  const btn=document.getElementById('btnBayarIpaymu'); btn.style.display='';btn.disabled=false;btn.textContent='Bayar dengan iPaymu';btn.dataset.plan=planName;
+  checkoutEstimate(); document.getElementById('checkoutModal').classList.add('open');
+}
+function closeCheckout(){document.getElementById('checkoutModal').classList.remove('open')}
+document.getElementById('checkoutBillingCycle').onchange=()=>{
+  clearVoucherPreview('Periode berubah. Klik Gunakan untuk memvalidasi ulang voucher.');
+  if(document.getElementById('checkoutVoucherCode').value.trim()) previewCheckoutVoucher();
+};
+document.getElementById('checkoutVoucherCode').addEventListener('input',()=>{
+  if(checkoutVoucherPreview) clearVoucherPreview('Kode voucher berubah. Klik Gunakan untuk memvalidasi ulang.');
+});
+document.getElementById('checkoutVoucherCode').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ e.preventDefault(); previewCheckoutVoucher(); }
+});
+document.getElementById('btnApplyVoucher').onclick=previewCheckoutVoucher;
 
 document.getElementById('btnBayarIpaymu').addEventListener('click', async ()=>{
   const planName = document.getElementById('btnBayarIpaymu').dataset.plan;
@@ -5716,7 +5932,7 @@ document.getElementById('btnBayarIpaymu').addEventListener('click', async ()=>{
     const res = await fetch(`${SUPABASE_URL}/functions/v1/create-ipaymu-payment`, {
       method: 'POST',
       headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}`, 'apikey': SUPABASE_ANON_KEY },
-      body: JSON.stringify({ plan: planName }),
+      body: JSON.stringify({ plan: planName, billingCycle: document.getElementById('checkoutBillingCycle').value, voucherCode: document.getElementById('checkoutVoucherCode').value.trim().toUpperCase() }),
     });
     const data = await res.json();
     if(!res.ok || !data.url){
@@ -5823,7 +6039,14 @@ function openInvoiceFromOrder(order){
 }
 document.getElementById('btnCloseInvoice').onclick = ()=> document.getElementById('invoiceModal').classList.remove('open');
 document.getElementById('invoiceModal').addEventListener('click', e=>{ if(e.target.id==='invoiceModal') document.getElementById('invoiceModal').classList.remove('open'); });
-document.getElementById('btnPrintInvoice').onclick = ()=> window.print();
+document.getElementById('btnPrintInvoice').onclick = ()=>{
+  document.body.classList.remove('print-struk');
+  document.body.classList.add('print-invoice');
+  const cleanup=()=>document.body.classList.remove('print-invoice');
+  window.addEventListener('afterprint', cleanup, {once:true});
+  window.print();
+  setTimeout(cleanup, 1500);
+};
 
 document.getElementById('btnUpgradeTop').onclick=openUpgradeModal;
 document.getElementById('btnUpgradeHero').onclick=openUpgradeModal;
@@ -6178,6 +6401,41 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 // ============================================================
+
+// ============================================================
+// ADMIN — VOUCHER MANAGEMENT v2.6.0
+// ============================================================
+let adminVouchers=[],adminVoucherUsage={};
+function voucherLocal(v){if(!v)return '';const d=new Date(v);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
+function voucherDiscountLabel(v){return v.discount_type==='percent'?`${Number(v.discount_value)}%`:`${fmtRpAdmin(v.discount_value)}`}
+async function loadAdminVouchers(){
+  if(!verifiedAdmin)return;
+  const [vr,rr]=await Promise.all([sb.from('commercial_vouchers').select('*').order('created_at',{ascending:false}),sb.from('commercial_voucher_redemptions').select('voucher_id,status')]);
+  if(vr.error){console.error(vr.error);showToast('Gagal memuat voucher. Pastikan migration v2.6.0 sudah dijalankan.');return}
+  adminVouchers=vr.data||[];adminVoucherUsage={};(rr.data||[]).forEach(r=>{if(r.status==='redeemed')adminVoucherUsage[r.voucher_id]=(adminVoucherUsage[r.voucher_id]||0)+1});renderAdminVouchers();
+}
+function renderAdminVouchers(){
+  const body=document.getElementById('adminVoucherRows'),empty=document.getElementById('adminVoucherEmpty');if(!body)return;
+  empty.style.display=adminVouchers.length?'none':'block';
+  body.innerHTML=adminVouchers.map(v=>`<tr><td><span class="voucher-code">${escapeHtml(v.code)}</span><div class="customer-email">${escapeHtml(v.name||'')}</div></td><td>${escapeHtml(voucherDiscountLabel(v))}</td><td>${escapeHtml((v.allowed_plans||[]).join(', '))}</td><td>${escapeHtml((v.allowed_cycles||[]).join(', '))}</td><td>${adminVoucherUsage[v.id]||0}${v.usage_limit?' / '+v.usage_limit:''}</td><td><span class="voucher-status ${v.is_active?'active':'inactive'}">${v.is_active?'Aktif':'Nonaktif'}</span></td><td class="num"><button class="btn small outline" data-vedit="${v.id}">Edit</button></td></tr>`).join('');
+  body.querySelectorAll('[data-vedit]').forEach(b=>b.onclick=()=>openVoucherAdmin(b.dataset.vedit));
+}
+function openVoucherAdmin(id=null){
+  const v=id?adminVouchers.find(x=>x.id===id):null;document.getElementById('voucherId').value=v?.id||'';document.getElementById('voucherModalTitle').textContent=v?'Edit Voucher':'Buat Voucher';
+  document.getElementById('voucherCode').value=v?.code||'';document.getElementById('voucherName').value=v?.name||'';document.getElementById('voucherType').value=v?.discount_type||'percent';document.getElementById('voucherValue').value=v?.discount_value||'';document.getElementById('voucherMaxDiscount').value=v?.max_discount||'';document.getElementById('voucherMinSubtotal').value=v?.min_subtotal||0;document.getElementById('voucherStartsAt').value=voucherLocal(v?.starts_at);document.getElementById('voucherEndsAt').value=voucherLocal(v?.ends_at);document.getElementById('voucherUsageLimit').value=v?.usage_limit||'';document.getElementById('voucherPerUserLimit').value=v?.per_user_limit||'';document.getElementById('voucherActive').checked=v?v.is_active:true;
+  document.querySelectorAll('[data-vplan]').forEach(c=>c.checked=!v||(v.allowed_plans||[]).includes(c.dataset.vplan));document.querySelectorAll('[data-vcycle]').forEach(c=>c.checked=!v||(v.allowed_cycles||[]).includes(c.dataset.vcycle));document.getElementById('voucherAdminModal').classList.add('open');
+}
+function closeVoucherAdmin(){document.getElementById('voucherAdminModal').classList.remove('open')}
+async function saveAdminVoucher(){
+  if(!(await verifyAdminRole()))return showToast('Akses admin ditolak.');
+  const id=document.getElementById('voucherId').value,code=document.getElementById('voucherCode').value.trim().toUpperCase(),name=document.getElementById('voucherName').value.trim(),type=document.getElementById('voucherType').value,value=Number(document.getElementById('voucherValue').value||0),plans=[...document.querySelectorAll('[data-vplan]:checked')].map(x=>x.dataset.vplan),cycles=[...document.querySelectorAll('[data-vcycle]:checked')].map(x=>x.dataset.vcycle);
+  if(!/^[A-Z0-9_-]{3,40}$/.test(code))return showToast('Kode voucher minimal 3 karakter: A-Z, 0-9, _ atau -.');if(!name||value<=0)return showToast('Nama dan nilai diskon wajib diisi.');if(type==='percent'&&value>100)return showToast('Diskon persen maksimal 100%.');if(!plans.length||!cycles.length)return showToast('Pilih minimal satu paket dan billing cycle.');
+  const nullableNum=id=>{const x=document.getElementById(id).value;return x===''?null:Number(x)};const nullableDate=id=>{const x=document.getElementById(id).value;return x?new Date(x).toISOString():null};
+  const payload={code,name,discount_type:type,discount_value:value,max_discount:nullableNum('voucherMaxDiscount'),min_subtotal:Number(document.getElementById('voucherMinSubtotal').value||0),allowed_plans:plans,allowed_cycles:cycles,starts_at:nullableDate('voucherStartsAt'),ends_at:nullableDate('voucherEndsAt'),usage_limit:nullableNum('voucherUsageLimit'),per_user_limit:nullableNum('voucherPerUserLimit'),is_active:document.getElementById('voucherActive').checked};if(!id)payload.created_by=currentUser.id;
+  const q=id?sb.from('commercial_vouchers').update(payload).eq('id',id):sb.from('commercial_vouchers').insert(payload);const {error}=await q;if(error){console.error(error);return showToast('Gagal menyimpan voucher: '+error.message)}closeVoucherAdmin();showToast('Voucher berhasil disimpan.');await loadAdminVouchers();
+}
+document.getElementById('btnAdminNewVoucher').onclick=()=>openVoucherAdmin();document.getElementById('btnCloseVoucherModal').onclick=closeVoucherAdmin;document.getElementById('btnCancelVoucher').onclick=closeVoucherAdmin;document.getElementById('btnSaveVoucher').onclick=saveAdminVoucher;document.getElementById('voucherAdminModal').onclick=e=>{if(e.target.id==='voucherAdminModal')closeVoucherAdmin()};
+
 // EKSPOR & PULIHKAN CADANGAN (khusus Owner toko & Superadmin BukuStok)
 // ============================================================
 document.getElementById('btnExport').addEventListener('click', ()=>{

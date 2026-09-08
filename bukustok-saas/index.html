@@ -131,10 +131,22 @@ body.is-staff-view .btn-hapus-data{display:none !important}
 .chart-empty .big{font-size:28px;opacity:.5}
 .plan-price-compare{font-size:11px;color:var(--gold-2);font-weight:650;margin:-6px 0 10px;}
 @media print{
-  body *{visibility:hidden;}
-  #invoicePrintArea, #invoicePrintArea *{visibility:visible;}
-  #invoicePrintArea{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:none;}
-  .no-print{display:none !important;}
+  body.print-invoice *{visibility:hidden !important;}
+  body.print-invoice #invoicePrintArea,
+  body.print-invoice #invoicePrintArea *{visibility:visible !important;}
+  body.print-invoice #invoicePrintArea{
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    box-shadow:none !important;
+    border:none !important;
+    transform:none !important;
+    background:#fff !important;
+  }
+  body.print-invoice .no-print{display:none !important;}
 }
 
 /* Loading */
@@ -502,10 +514,21 @@ tr.filter-row th:first-child,tr.filter-row th:last-child{border-radius:0}
   line-height:1.55;white-space:pre-wrap;word-break:break-word;color:#111;max-width:280px;
 }
 @media print{
-  body *{visibility:hidden !important;}
-  #strukPrintWrap, #strukPrintWrap *{visibility:visible !important;}
-  #strukPrintWrap{position:absolute;top:0;left:0;width:58mm;}
-  .struk-58{border:none;max-width:100%;font-size:11px;padding:0;}
+  body.print-struk *{visibility:hidden !important;}
+  body.print-struk #strukPrintWrap,
+  body.print-struk #strukPrintWrap *{visibility:visible !important;}
+  body.print-struk #strukPrintWrap{
+    position:absolute !important;
+    top:0 !important;
+    left:0 !important;
+    width:58mm !important;
+  }
+  body.print-struk .struk-58{
+    border:none !important;
+    max-width:100% !important;
+    font-size:11px !important;
+    padding:0 !important;
+  }
 }
 
 .foto-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border);display:block}
@@ -4542,7 +4565,12 @@ document.getElementById('btnTutupStruk').addEventListener('click', ()=>{
   strukIdAktif = null;
 });
 document.getElementById('btnCetakBrowser').addEventListener('click', ()=>{
+  document.body.classList.remove('print-invoice');
+  document.body.classList.add('print-struk');
+  const cleanupPrintStruk=()=>document.body.classList.remove('print-struk');
+  window.addEventListener('afterprint', cleanupPrintStruk, {once:true});
   window.print();
+  setTimeout(cleanupPrintStruk, 1500);
   if(strukIdAktif){
     const t = penjualanList.find(x=>x.id===strukIdAktif);
     if(t) logActivity('struk.cetak', `Mencetak struk transaksi penjualan (${(t.items||[]).length} produk, total ${fmtRpAdmin(t.total)}) via dialog print`, {entityType:'penjualan', entityId:t.id});
@@ -5950,7 +5978,14 @@ function openInvoiceFromOrder(order){
 }
 document.getElementById('btnCloseInvoice').onclick = ()=> document.getElementById('invoiceModal').classList.remove('open');
 document.getElementById('invoiceModal').addEventListener('click', e=>{ if(e.target.id==='invoiceModal') document.getElementById('invoiceModal').classList.remove('open'); });
-document.getElementById('btnPrintInvoice').onclick = ()=> window.print();
+document.getElementById('btnPrintInvoice').onclick = ()=>{
+  document.body.classList.remove('print-struk');
+  document.body.classList.add('print-invoice');
+  const cleanup=()=>document.body.classList.remove('print-invoice');
+  window.addEventListener('afterprint', cleanup, {once:true});
+  window.print();
+  setTimeout(cleanup, 1500);
+};
 
 document.getElementById('btnUpgradeTop').onclick=openUpgradeModal;
 document.getElementById('btnUpgradeHero').onclick=openUpgradeModal;

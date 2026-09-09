@@ -361,6 +361,36 @@ img{height:auto}
   .actions .btn{width:100%;min-height:50px}
 }
 
+
+/* BukuStok dropdown chevron v2.6.8 */
+.bs-desktop-nav .bs-drop > button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+
+.bs-desktop-nav .bs-drop > button::after{
+  content:"";
+  width:7px;
+  height:7px;
+  flex:0 0 7px;
+  border-right:1.7px solid currentColor;
+  border-bottom:1.7px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);
+  transform-origin:center;
+  opacity:.72;
+  transition:
+    transform .18s ease,
+    opacity .18s ease;
+}
+
+.bs-desktop-nav .bs-drop:hover > button::after,
+.bs-desktop-nav .bs-drop:focus-within > button::after{
+  transform:rotate(225deg) translate(-1px,-1px);
+  opacity:1;
+}
+
 </style></head><body><header class="bs-master-nav">
 <div class="bs-nav-wrap">
 <a class="bs-logo" href="/" aria-label="BukuStok"><img src="/assets/bukustok-logo.png" alt="BukuStok" width="170" height="48" decoding="async"></a>
